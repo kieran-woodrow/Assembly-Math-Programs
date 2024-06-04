@@ -1,207 +1,115 @@
 segment .data
-        text1 db "Please enter the first number: " 
-        text2 db "Please enter the second number: "
-        text3 db "r" 
+        text1 db "Please enter the first number: " ;get user numbers
+        text2 db "Please enter the second number: " ; display after getting numbers
 
 segment .bss
-        answerOne resb 1
+        result resb 2
+        answerOne resb 2; reserve 1 bytes
         answerTwo resb 2
-        answerThree resb 1
-        answerFour resb 2
-        resultOne resb 1
-        resultTwo resb 1
-        quotient resb 1
-        remainder resb 1
-        q1 resb 1
-        r1 resb 1
-        q2 resb 1
-        r2 resb 1
-     
+        quotient resb 2;
+        remainder resb 2;
+      
+    
 segment .text
         global _start
 
 _start
-call _printTextOne
-call _firstDigit
-call _printTextTwo
-call _secondDigit
-call _divideFunction
-call _divideAgain
-call _printOne
-call _printTwo
-call _printThree
-call _printFour
-call _printFive
+
+call _printtext1
+call _getdigit1
+call _printtext2
+call _getdigit2
+call _addFunction
+call _seperateFunction
+
+
 
 mov rax, 60
 mov rdi, 0
 syscall
 
-_printTextOne:
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, text1
-        mov rdx, 31
-        syscall
-        ret
 
-_firstDigit:
-        mov rax, 0
+_getdigit1:
+        mov eax, 0
         mov rdi, 0
         mov rsi, answerOne
-        mov rdx, 1
+        mov edx, 2
         syscall
-  
-        mov rax, 0
-        mov rdi, 0
-        mov rsi, answerTwo
-        mov rdx, 2
-        syscall
-        
-        mov al, [answerOne]                               
-        sub al, '0'                                      
-        mov bl, 10  
-        mul bl                       
-        mov cl, [answerTwo]    
-        sub cl, '0'
-        add al, cl                                       
-        add al, '0'                                     
-        mov [resultOne], al   
         ret
 
-_printTextTwo:
-        mov rax, 1
+_getdigit2:
+        mov eax, 0
+        mov rdi, 0
+        mov rsi, answerTwo 
+        mov edx, 1
+        syscall
+        ret
+
+_printtext1:
+        mov eax, 1 ; SYS-WRITE code is 1
+        mov rdi, 1 ; STDOUTPUT code is 1
+        mov rsi, text1 ; output text 1
+        mov edx, 31 ; has length of 25 characters
+        syscall
+        ret
+
+_printtext2:
+        mov eax, 1
         mov rdi, 1
         mov rsi, text2
-        mov rdx, 32
+        mov edx, 32
         syscall
         ret
 
-_secondDigit:
-        mov rax, 0
-        mov rdi, 0
-        mov rsi, answerThree
-        mov rdx, 1
-        syscall
-  
-        mov rax, 0
-        mov rdi, 0
-        mov rsi, answerFour
-        mov rdx, 2
-        syscall
-        
-        mov al, [answerThree]                               
-        sub al, '0'                                      
-        mov bl, 10  
-        mul bl                       
-        mov cl, [answerFour]    
-        sub cl, '0'
-        add al, cl                                       
-        add al, '0'                                     
-        mov [resultTwo], al   
-        ret
+_addFunction
+        mov eax, [answerOne]                               ; move answer one into register
+        sub eax, '0'                                       ; convert to ascii
+        mov ebx, [answerTwo]                               ; move answer two to register
+        sub ebx, '0'                                       ; convert to ascii
+        add eax, ebx                                       ; ad the two variables togther
+        add eax, '0'                                       ; convert to decimal
+        mov [result], eax   
+                                                           ; move from register and into variable result
+        syscall                                            ; function end
+        ret                                                ; return function value
 
-_divideFunction:
-        mov ax, [resultOne]                            
-        sub al, '0'                                        
-        mov bl, [resultTwo]
-        sub bl, '0'
-        xor ah, ah
-        div bl
-        add al, '0'
-        add ah, '0'
-       
-        mov [quotient], al 
-        mov [remainder], ah
-        ret
+_seperateFunction
 
-_divideAgain:
-
-        mov ax, [quotient]
+        mov ax, [result]  
         sub al, '0'
         mov bl, 10
         xor ah, ah
         div bl
         add al, '0'
         add ah, '0'
-        mov [q1], al
-        mov [r1], ah
- 
-        mov al, [remainder]
-        sub al, '0'
-        mov bl, 10
-        xor ah, ah
-        div bl
-        add al, '0'
-        add ah, '0'
-        mov [q2], al
-        mov [r2], ah
-        syscall
-        ret
-   
-   
-_printOne:
+       
+        mov byte [quotient], al 
+        mov byte [remainder], ah
+
         mov rax, 1
         mov rdi, 1
-        mov rsi, q1
+        mov rsi, quotient
         mov rdx, 1
         syscall
-        ret
-
-_printTwo:
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, r1
-        mov rdx, 1
-        syscall
-        ret
-
-_printThree:
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, text3
-        mov rdx, 1
-        syscall
-        ret
-
-_printFour:
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, q2
-        mov rdx, 1
-        syscall
-        ret
-
-_printFive:
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, r2
-        mov rdx, 1
-        syscall
-        ret
-
-
-
-
-        
-   
-   
-   
-
         
 
+        mov rax, 1
+        mov rdi, 1
+        mov rsi, remainder
+        mov rdx, 1
+        syscall
 
+        ret
 
-
-
-
-
-
-
-  
-       
-
-       
-       
 
  
+     
+
+
+
+
+      
+
+
+
+       
