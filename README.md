@@ -10,6 +10,3 @@ adding any two single digits supplied by the user, input 2 double digit numbers 
 - Install GDB and c++ using gcc
 - Download all files
 - use GDB to import asm file and run it
-
-rr ̄2 2255−r ̄2
-(2+ 256)(R1 −R2) +4(G1 −G2) +(2+ 256 )(B1 −B2)
