@@ -1,0 +1,60 @@
+     1                                 %line 1+1 task1.asm
+     2                                 [segment .data]
+     3 00000000 506C6561736520696E-     text1 db "Please input a 5 digit number: "
+     4 00000000 707574206120352064-
+     5 00000000 69676974206E756D62-
+     6 00000000 65723A20           
+     7 0000001F 546869732069732074-     text2 db "This is the number you are looking for: "
+     8 0000001F 6865206E756D626572-
+     9 0000001F 20796F752061726520-
+    10 0000001F 6C6F6F6B696E672066-
+    11 0000001F 6F723A20           
+    12                                 
+    13                                 [segment .bss]
+    14 00000000 <gap>                   digits resb 1
+    15                                 
+    16                                 [segment .text]
+    17                                 [global _start]
+    18                                 
+    19                                 _start
+    20                                 
+    21 00000000 E835000000             call _printtext1
+    22 00000005 E815000000             call _getdigits
+    23 0000000A E846000000             call _printtext2
+    24 0000000F E85C000000             call _printdigits
+    25                                 
+    26 00000014 48C7C03C000000         mov rax, 60
+    27 0000001B 48C7C700000000         mov rdi, 0
+    28 00000022 0F05                   syscall
+    29                                 
+    30                                 _getdigits:
+    31 00000024 B800000000              mov eax, 0
+    32 00000029 48C7C700000000          mov rdi, 0
+    33 00000030 48C7C6[00000000]        mov rsi, digits
+    34 00000037 BA05000000              mov edx, 5
+    35 0000003C 0F05                    syscall
+    36 0000003E C3                      ret
+    37                                 
+    38                                 _printtext1:
+    39 0000003F B801000000              mov eax, 1
+    40 00000044 48C7C701000000          mov rdi, 1
+    41 0000004B 48C7C6[00000000]        mov rsi, text1
+    42 00000052 BA1F000000              mov edx, 31
+    43 00000057 0F05                    syscall
+    44 00000059 C3                      ret
+    45                                 
+    46                                 _printtext2:
+    47 0000005A B801000000              mov eax, 1
+    48 0000005F 48C7C701000000          mov rdi, 1
+    49 00000066 48C7C6[00000000]        mov rsi, text2
+    50 0000006D BA28000000              mov edx, 40
+    51 00000072 0F05                    syscall
+    52 00000074 C3                      ret
+    53                                 
+    54                                 _printdigits:
+    55 00000075 B801000000              mov eax, 1
+    56 0000007A 48C7C201000000          mov rdx, 1
+    57 00000081 48C7C6[00000000]        mov rsi, digits
+    58 00000088 BA05000000              mov edx, 5
+    59 0000008D 0F05                    syscall
+    60 0000008F C3                      ret
